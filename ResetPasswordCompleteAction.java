@@ -17,14 +17,14 @@ public class ResetPasswordCompleteAction extends ActionSupport implements Sessio
 		UserInfoDAO userInfoDAO = new UserInfoDAO();
 
 		//DB更新の結果
-		////成功→SUCCESSを返す、失敗→ERRORを返す
+		//NULLが入ってはいけないため、String.valueOf()ではなくtoString()を使用している
 		int count = userInfoDAO.resetPassword(session.get("userIdForResetPassword").toString(), session.get("newPassword").toString());
 
 		if(count > 0){
 			result = SUCCESS;
 		}
 
-		////この画面でsessionは不要になるため削除する
+		//この画面でsessionは不要になるため削除する
 		session.remove("userIdForResetPassword");
 		session.remove("newPassword");
 

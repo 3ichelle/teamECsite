@@ -31,18 +31,18 @@ public class ResetPasswordConfirmAction extends ActionSupport implements Session
 
 		InputChecker inC = new InputChecker();
 
-		////sessionでuserIdを保持（DBにupdateするまで必要のため)
+		//sessionでuserIdを保持（DBにupdateするまで必要のため)
 		session.put("userIdForResetPassword", userId);
 
 		//入力チェックの結果
-		////入力チェックの結果(エラーメッセージList)を変数に格納
-		////引数内容（項目名、値、最小文字数、最大文字数、半角英字許容、漢字許容、ひらがな許容、半角数字許容、半角記号許容、カタカナ許容、スペース許容）
+		//結果(エラーメッセージList)を変数に格納
+		//引数内容（項目名、値、最小文字数、最大文字数、半角英字許容、漢字許容、ひらがな許容、半角数字許容、半角記号許容、カタカナ許容、スペース許容）
 		userIdErrorMessageList = inC.doCheck("ユーザーID",userId,1,8,true,false,false,true,false,false,false);
 		passwordErrorMessageList = inC.doCheck("現在のパスワード",password,1,16,true,false,false,true,false,false,false);
 		newPasswordErrorMessageList = inC.doCheck("新しいパスワード",newPassword,1,16,true,false,false,true,false,false,false);
 		reConfirmationNewPasswordErrorMessageList = inC.doCheck("新しいパスワード（再確認）",reConfirmationNewPassword,1,16,true,false,false,true,false,false,false);
 
-		////エラーが一つでもあった場合はERRORを返す
+		//エラーが一つでもあった場合はERRORを返す
 		if(userIdErrorMessageList.size()>0
 		|| passwordErrorMessageList.size()>0
 		|| newPasswordErrorMessageList.size()>0
@@ -51,7 +51,7 @@ public class ResetPasswordConfirmAction extends ActionSupport implements Session
 		}
 
 		//ユーザー存在チェックの結果
-		////falseの場合はERRORを返す
+		//falseの場合はERRORを返す
 		UserInfoDAO userInfoDAO = new UserInfoDAO();
 		if(! userInfoDAO.isExistsUserInfo(userId,password)){
 			////エラーメッセージを変数に格納
@@ -60,15 +60,15 @@ public class ResetPasswordConfirmAction extends ActionSupport implements Session
 		}
 
 		//新しいパスワードと新しいパスワード（再確認）の一致確認の結果
-		////エラーメッセージを変数に格納
+		//エラーメッセージを変数に格納
 		CommonUtility commonUtility = new CommonUtility();
 		checkDoPassword = inC.doPasswordCheck(newPassword,reConfirmationNewPassword);
 
-		////一致する場合SUCCESSを返す
+		//一致する場合SUCCESSを返す
 		if(checkDoPassword == null){
-			////次の画面で表示するパスワードの表示を一文字目以降を*で表す（表示文字数　16文字)
+			//次の画面で表示するパスワードの表示を一文字目以降を*で表す（表示文字数　16文字)
 			concealPassword = commonUtility.concealPassword(newPassword);
-			////sessionでnewPasswordを保持（DBにupdateするまで必要のため)
+			//sessionでnewPasswordを保持（DBにupdateするまで必要のため)
 			session.put("newPassword",newPassword);
 
 			result = SUCCESS;
